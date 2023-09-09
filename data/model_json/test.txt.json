@@ -1,0 +1,44 @@
+{
+    "model": {
+        "('///START', 'This')": [
+            "is",
+            "is",
+            "is"
+        ],
+        "('This', 'is')": [
+            "a",
+            "another",
+            "a"
+        ],
+        "('is', 'a')": [
+            "test",
+            "third"
+        ],
+        "('a', 'test')": [
+            "sentence"
+        ],
+        "('test', 'sentence')": [
+            ".",
+            ".",
+            "."
+        ],
+        "('sentence', '.')": [
+            "END///",
+            "END///",
+            "END///"
+        ],
+        "('is', 'another')": [
+            "test"
+        ],
+        "('another', 'test')": [
+            "sentence"
+        ],
+        "('a', 'third')": [
+            "test"
+        ],
+        "('third', 'test')": [
+            "sentence"
+        ]
+    },
+    "order": 2
+}

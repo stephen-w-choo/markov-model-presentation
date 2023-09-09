@@ -1,40 +1,41 @@
 import lib.file_io as file_io
-import lib.markov_utils as markov_utils
-from lib.markovclass import MarkovModel
+from lib.markovclass import NGramModel
 import sys
+import os
 
 JSON_OUTPUT_PATH = "/data/model_json"
 
-def make_model(file_path: str):
-    ngrams = markov_utils.ngram_tokenise(file_io.read_text_file(file_path), 3)
-    model = markov_utils.generate_adj_list(ngrams)
-    file_io.write_dict_to_json_file(model.toJson(), f"{JSON_OUTPUT_PATH}/{file_path}.json")
+def make_model(file_path: str, order: int = 2):
+    text = file_io.read_text_file(file_path)
+    model = NGramModel(text, order)
+    print(model.toJson())
+    file_io.write_dict_to_json_file(model.toJson(), f"./{JSON_OUTPUT_PATH}/{os.path.basename(file_path)}.json")
 
 def generate_text(file_path: str):
-    model = file_io.read_json_file(f"{file_path}.json")
-    generated_text = markov_utils.generate_text(MarkovModel.fromJson(model), 3)
+    json = file_io.read_json_file(f"{JSON_OUTPUT_PATH}/{file_path}.json")
+    model = NGramModel.fromAdjList(json["model"], json["order"])
+    generated_text = model.generate_text()
     print(generated_text)
 
-commands = {
-    "makemodel": make_model,
-    "generatetext": generate_text
-}
-
-error_message = f"Usage: python3 main.py <command> <file_path>. Valid commands are {', '.join(commands.keys())}."
 
 if __name__ == '__main__':
+    ERROR_MESSAGE = f"Usage: python3 main.py <command> <file_path> <order/sentence no>. Valid commands are {', '.join(commands.keys())}."
+
+    COMMANDS = {
+        "makemodel": make_model,
+        "generatetext": generate_text
+    }
+    
     if len(sys.argv) < 3:
-        print(error_message)
+        print(ERROR_MESSAGE)
         sys.exit(1)
 
-    command = sys.argv[1]
-    file_path = sys.argv[2]
+    command, file_path, num = sys.argv[1], sys.argv[2], sys.argv[3]
 
-    # check if command is valid
-    if command not in commands:
-        print(error_message)
+    if command not in COMMANDS: # check if command is valid
+        print(ERROR_MESSAGE)
         sys.exit(1)
     
-    # run the command
-    commands[command](file_path)
+    COMMANDS[command](file_path)
+    sys.exit(0)
         
