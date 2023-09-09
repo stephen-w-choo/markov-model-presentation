@@ -1,15 +1,17 @@
 import lib.file_io as file_io
 from lib.markovclass import NGramModel
+from os.path import basename
 import sys
-import os
 
 JSON_OUTPUT_PATH = "/data/model_json"
 
 def make_model(file_path: str, order: int = 2):
     text = file_io.read_text_file(file_path)
     model = NGramModel(text, order)
-    print(model.toJson())
-    file_io.write_dict_to_json_file(model.toJson(), f"./{JSON_OUTPUT_PATH}/{os.path.basename(file_path)}.json")
+    file_io.write_dict_to_json_file(
+        model.toJson(), 
+        f"./{JSON_OUTPUT_PATH}/{basename(file_path)}.json"
+    )
 
 def generate_text(file_path: str):
     json = file_io.read_json_file(f"{JSON_OUTPUT_PATH}/{file_path}.json")

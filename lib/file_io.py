@@ -1,4 +1,5 @@
 import json
+import ast
 from typing import Any, Dict, DefaultDict
 
 def read_text_file(relative_path: str) -> str:
