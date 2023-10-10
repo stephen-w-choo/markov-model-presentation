@@ -1,43 +1,41 @@
 import lib.file_io as file_io
 from lib.markovclass import NGramModel
-from os.path import basename
+from os.path import basename, splitext
 import sys
+import click
 
 JSON_OUTPUT_PATH = "/data/model_json"
+TXT_OUTPUT_PATH = "/data/output_txt"
 
+@click.command()
+@click.argument('file_path', type=click.Path(exists=True, readable=True))
+@click.option('--order', default=2, type=int, help='Order for the n-gram model.')
 def make_model(file_path: str, order: int = 2):
     text = file_io.read_text_file(file_path)
     model = NGramModel(text, order)
     file_io.write_dict_to_json_file(
         model.toJson(), 
-        f"./{JSON_OUTPUT_PATH}/{basename(file_path)}.json"
+        f"./{JSON_OUTPUT_PATH}/{file_io.file_name(file_path)}.json"
     )
 
-def generate_text(file_path: str):
-    json = file_io.read_json_file(f"{JSON_OUTPUT_PATH}/{file_path}.json")
+@click.command()
+@click.argument('file_path', type=click.Path(exists=True, readable=True))
+@click.option('--num-sentences', default=5, type=int, help='Number of sentences to generate.')
+def generate_text(file_path: str, num_sentences: int = 5):
+    json = file_io.read_json_file(file_path)
     model = NGramModel.fromAdjList(json["model"], json["order"])
-    generated_text = model.generate_text()
-    print(generated_text)
+    output_file = open(f"./{TXT_OUTPUT_PATH}/{file_io.file_name(file_path)}_generated.txt", "w")
+    for _ in range(int(num_sentences)):
+        generated_text = model.generate_text()
+        print(generated_text)
+        output_file.write(generated_text + "\n")
 
+@click.group()
+def cli():
+    pass
+
+cli.add_command(make_model)
+cli.add_command(generate_text)
 
 if __name__ == '__main__':
-    ERROR_MESSAGE = f"Usage: python3 main.py <command> <file_path> <order/sentence no>. Valid commands are {', '.join(commands.keys())}."
-
-    COMMANDS = {
-        "makemodel": make_model,
-        "generatetext": generate_text
-    }
-    
-    if len(sys.argv) < 3:
-        print(ERROR_MESSAGE)
-        sys.exit(1)
-
-    command, file_path, num = sys.argv[1], sys.argv[2], sys.argv[3]
-
-    if command not in COMMANDS: # check if command is valid
-        print(ERROR_MESSAGE)
-        sys.exit(1)
-    
-    COMMANDS[command](file_path)
-    sys.exit(0)
-        
+    cli()

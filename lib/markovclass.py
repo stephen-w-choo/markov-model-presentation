@@ -20,7 +20,7 @@ class NGramModel:
 
         for sentence in sentences:
             sentence = '///START ' + sentence + ' END///' # add start and end tokens
-            words = nltk.tokenize.word_tokenize(sentence) 
+            words = sentence.split()
             for i in range(len(words) - n + 1):
                 ngrams.append(tuple(words[i:i+n]))
 
@@ -37,7 +37,14 @@ class NGramModel:
 
     def generate_text(self) -> str:
         sentence: list[str] = []
-        current_token = random.choice(list(self.adj_list.keys()))
+
+        # get all the tokens that begin with '///START'
+        start_tokens = [token for token in self.adj_list.keys() if token[0] == '///START']
+
+        current_token = random.choice(start_tokens)
+
+        # add the first n-1 words to the sentence
+        sentence.extend(current_token[1:-1])
 
         while current_token in self.adj_list:
             sentence.append(current_token[-1])

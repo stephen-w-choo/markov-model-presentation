@@ -1,6 +1,7 @@
 import json
 import ast
 from typing import Any, Dict, DefaultDict
+from os.path import basename, splitext
 
 def read_text_file(relative_path: str) -> str:
     with open(relative_path, 'r') as f:
@@ -26,3 +27,6 @@ def tuple_keys_to_str(dictionary: Dict[Any, Any]) -> Dict[str, Any]:
 
 def str_keys_to_tuple(dictionary: Dict[str, Any]) -> Dict[Any, Any]:
     return {ast.literal_eval(k): v for k, v in dictionary.items() if k.startswith('(') and k.endswith(')')}
+
+def file_name(path: str) -> str:
+    return splitext(basename(path))[0]
