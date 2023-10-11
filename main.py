@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
+
 import lib.file_io as file_io
-from lib.markovclass import NGramModel
+from lib.markov_class import NGramModel
 from os.path import basename, splitext
 import sys
 import click

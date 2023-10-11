@@ -43,7 +43,7 @@ class NGramModel:
 
         current_token = random.choice(start_tokens)
 
-        # add the first n-1 words to the sentence
+        # add the first n-1 words to the sentence, excluding the '///START' token
         sentence.extend(current_token[1:-1])
 
         while current_token in self.adj_list:
