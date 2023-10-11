@@ -2,8 +2,6 @@
 
 import lib.file_io as file_io
 from lib.markov_class import NGramModel
-from os.path import basename, splitext
-import sys
 import click
 
 JSON_OUTPUT_PATH = "/data/model_json"
