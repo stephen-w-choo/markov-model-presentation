@@ -20,15 +20,15 @@ def make_model(file_path: str, order: int = 2):
 
 @click.command()
 @click.argument('file_path', type=click.Path(exists=True, readable=True))
-@click.option('--num-sentences', default=5, type=int, help='Number of sentences to generate.')
-def generate_text(file_path: str, num_sentences: int = 5):
+@click.option('--num-sentences', default=20, type=int, help='Number of sentences to generate.')
+def generate_text(file_path: str, num_sentences: int = 20):
     json = file_io.read_json_file(file_path)
     model = NGramModel.fromAdjList(json["model"], json["order"])
     output_file = open(f"./{TXT_OUTPUT_PATH}/{file_io.file_name(file_path)}_generated.txt", "w")
     for _ in range(int(num_sentences)):
         generated_text = model.generate_text()
         print(generated_text)
-        output_file.write(generated_text + "\n")
+        output_file.write(generated_text + "\n\n")
 
 @click.group()
 def cli():

@@ -1,5 +1,4 @@
 import json
-import ast
 from typing import Any, Dict, DefaultDict
 from os.path import basename, splitext
 
@@ -19,14 +18,10 @@ def write_dict_to_json_file(dictionary: Dict[Any, Any], relative_path: str):
 def read_json_file(relative_path: str) -> Dict[Any, Any]:
     with open(relative_path, 'r') as f:
         data = json.load(f)
-    data["model"] = DefaultDict(list, str_keys_to_tuple(data["model"]))
     return data
 
 def tuple_keys_to_str(dictionary: Dict[Any, Any]) -> Dict[str, Any]:
     return {str(k): v for k, v in dictionary.items()}
-
-def str_keys_to_tuple(dictionary: Dict[str, Any]) -> Dict[Any, Any]:
-    return {ast.literal_eval(k): v for k, v in dictionary.items() if k.startswith('(') and k.endswith(')')}
 
 def file_name(path: str) -> str:
     return splitext(basename(path))[0]

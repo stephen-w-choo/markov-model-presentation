@@ -18,19 +18,16 @@ class NGramModel:
 
         for sentence in sentences:
             sentence = '///START ' + sentence + ' END///' # add start and end tokens
-            words = sentence.split()
+            words = sentence.split(" ")
             for i in range(len(words) - 1):
                 bigrams.append(tuple(words[i:i+2]))
 
-            
-        print(bigrams)
         return bigrams
 
     def generate_adj_list(self, bigrams: list[NGram]) -> dict[str, list[str]]:
         generated_adj_list: DefaultDict[str, list[str]] = DefaultDict(list)
         
         for bigram in bigrams:
-            print(bigram)
             key = bigram[0]
             generated_adj_list[key].append(bigram[-1])
 
@@ -45,7 +42,7 @@ class NGramModel:
             current_token = random.choice(self.adj_list[current_token])
             sentence.append(current_token)
 
-        return ' '.join(sentence)
+        return ' '.join(sentence[:-1])
     
     def toJson(self):
         return {"model": self.adj_list, "order": self.order}
