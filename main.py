@@ -27,7 +27,6 @@ def generate_text(file_path: str, num_sentences: int = 20):
     output_file = open(f"./{TXT_OUTPUT_PATH}/{file_io.file_name(file_path)}_generated.txt", "w")
     for _ in range(int(num_sentences)):
         generated_text = model.generate_text()
-        print(generated_text)
         output_file.write(generated_text + "\n\n")
 
 @click.group()

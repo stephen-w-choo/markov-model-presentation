@@ -13,32 +13,38 @@ class NGramModel:
 
     def ngram_tokenise(self, text: str) -> list[NGram]:
         bigrams: list[NGram] = []
-        
-        sentences: list[str] = nltk.tokenize.sent_tokenize(text) 
+        """
+        Split the text into sentences, then split each sentence into bigrams.
+        """
+        sentences = nltk.tokenize.sent_tokenize(text)
 
         for sentence in sentences:
-            sentence = '///START ' + sentence + ' END///' # add start and end tokens
-            words = sentence.split(" ")
-            for i in range(len(words) - 1):
-                bigrams.append(tuple(words[i:i+2]))
-
+            sentence = "///START " + sentence + " ///END"
+            tokens = sentence.split(" ")
+            for i in range(len(tokens) - 1):
+                bigrams.append((tokens[i], tokens[i + 1]))
+                
         return bigrams
 
     def generate_adj_list(self, bigrams: list[NGram]) -> dict[str, list[str]]:
         generated_adj_list: DefaultDict[str, list[str]] = DefaultDict(list)
-        
-        for bigram in bigrams:
-            key = bigram[0]
-            generated_adj_list[key].append(bigram[-1])
+        """
+        Generate an adjacency list from the bigrams.
+        """
 
+        for bigram in bigrams:
+            generated_adj_list[bigram[0]].append(bigram[1])
+        print(generated_adj_list)
         return generated_adj_list
 
     def generate_text(self) -> str:
         sentence: list[str] = []
-
+        """
+        Do a random walk through the graph, starting at the start token.
+        """
         current_token = "///START"
 
-        while current_token in self.adj_list:
+        while current_token != "///END":
             current_token = random.choice(self.adj_list[current_token])
             sentence.append(current_token)
 
