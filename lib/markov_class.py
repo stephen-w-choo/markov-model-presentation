@@ -20,7 +20,7 @@ class NGramModel:
 
         for sentence in sentences:
             sentence = '///START ' + sentence + ' END///' # add start and end tokens
-            words = sentence.split()
+            words = sentence.split(" ")
             for i in range(len(words) - n + 1):
                 ngrams.append(tuple(words[i:i+n]))
 
