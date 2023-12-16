@@ -12,41 +12,29 @@ class NGramModel:
         self.order = order
 
     def ngram_tokenise(self, text: str) -> list[NGram]:
-        bigrams: list[NGram] = []
         """
         Split the text into sentences, then split each sentence into bigrams.
         """
-        sentences = nltk.tokenize.sent_tokenize(text)
+        bigrams: list[NGram] = []
+        # enter your code here
 
-        for sentence in sentences:
-            sentence = "///START " + sentence + " ///END"
-            tokens = sentence.split(" ")
-            for i in range(len(tokens) - 1):
-                bigrams.append((tokens[i], tokens[i + 1]))
-                
         return bigrams
 
     def generate_adj_list(self, bigrams: list[NGram]) -> dict[str, list[str]]:
-        generated_adj_list: DefaultDict[str, list[str]] = DefaultDict(list)
         """
         Generate an adjacency list from the bigrams.
         """
+        generated_adj_list: DefaultDict[str, list[str]] = DefaultDict(list)
+        # enter your code here
 
-        for bigram in bigrams:
-            generated_adj_list[bigram[0]].append(bigram[1])
-        print(generated_adj_list)
         return generated_adj_list
 
     def generate_text(self) -> str:
-        sentence: list[str] = []
         """
         Do a random walk through the graph, starting at the start token.
         """
-        current_token = "///START"
-
-        while current_token != "///END":
-            current_token = random.choice(self.adj_list[current_token])
-            sentence.append(current_token)
+        sentence: list[str] = []
+        # enter your code here
 
         return ' '.join(sentence[:-1])
     
