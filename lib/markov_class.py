@@ -16,7 +16,7 @@ class NGramModel:
         Split the text into sentences, then split each sentence into bigrams.
         """
         bigrams: list[NGram] = []
-        # enter your code here
+        # 
 
         return bigrams
 
