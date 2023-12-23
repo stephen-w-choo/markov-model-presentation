@@ -1,6 +1,6 @@
-# Simple Markov Text Models Talk
+# Simple Markov Text Model Generator
 
-This repository is used for a talk I give on simple Markov models, and predictive language models in general.
+This repository is used for a presentation I've given on simple Markov models, and predictive language models in general.
 
 In this repository - I've implemented a simple Markov Model (with options for higher order models) from scratch in plain Python. I've tried to do it with as minimal abstractions as possible - just to illustrate what I think is both a really simple, and elegant concept. The one exception is using NLTK for tokenisation - because tokenisation itself is very much a non-trivial task to implement from scratch.
 
