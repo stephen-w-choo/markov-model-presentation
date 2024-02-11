@@ -9,10 +9,10 @@ TXT_OUTPUT_PATH = "/data/output_txt"
 
 @click.command()
 @click.argument('file_path', type=click.Path(exists=True, readable=True))
-@click.option('--order', default=2, type=int, help='Order for the n-gram model.')
-def make_model(file_path: str, order: int = 2):
+@click.option('--order', default=1, type=int, help='Order for the n-gram model.')
+def make_model(file_path: str, order: int = 1):
     text = file_io.read_text_file(file_path)
-    model = NGramModel(text, order)
+    model = NGramModel(text, 10)
     file_io.write_dict_to_json_file(
         model.toJson(), 
         f"./{JSON_OUTPUT_PATH}/{file_io.file_name(file_path)}.json"
