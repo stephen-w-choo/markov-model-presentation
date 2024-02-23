@@ -38,19 +38,17 @@ class NGramModel:
     def generate_text(self) -> str:
         sentence: list[str] = []
 
-        # get all the tokens that begin with '///START'
         start_tokens = [token for token in self.adj_list.keys() if token[0] == '///START']
 
         current_token = random.choice(start_tokens)
 
-        # add the first n-1 words to the sentence, excluding the '///START' token
-        sentence.extend(current_token[1:-1])
+        sentence.extend(current_token[1:])
 
         while current_token in self.adj_list:
-            sentence.append(current_token[-1])
             current_token = current_token[1:] + (random.choice(self.adj_list[current_token]),)
+            sentence.append(current_token[-1])
 
-        return ' '.join(sentence)
+        return ' '.join(sentence[:-1])
     
     def toJson(self):
         return {"model": self.adj_list, "order": self.order}

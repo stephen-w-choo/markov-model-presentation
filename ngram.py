@@ -1,40 +1,40 @@
 #!/usr/bin/env python3
 
 import lib.file_io as file_io
-from lib.markov_class import NGramModel
+from lib.model_class import NGramModel
 import click
+import sys
 
 JSON_OUTPUT_PATH = "data/model_json"
 TXT_OUTPUT_PATH = "/data/output_txt"
 
-@click.command()
-@click.argument('file_path', type=click.Path(exists=True, readable=True))
-@click.option('--order', default=1, type=int, help='Order for the n-gram model.')
+def main():
+    file_path = sys.argv[1]
+    if len(sys.argv) > 2:
+        order = int(sys.argv[2])
+    else:
+        order = 1
+    generate_text(make_model(file_path, order), 20)
+
 def make_model(file_path: str, order: int = 1):
     text = file_io.read_text_file(file_path)
-    model = NGramModel(text, 10)
+    model = NGramModel(text, order)
+    output_path = f"./{JSON_OUTPUT_PATH}/{file_io.file_name(file_path)}.json"
     file_io.write_dict_to_json_file(
         model.toJson(), 
         f"./{JSON_OUTPUT_PATH}/{file_io.file_name(file_path)}.json"
     )
+    return output_path
 
-@click.command()
-@click.argument('file_path', type=click.Path(exists=True, readable=True))
-@click.option('--num-sentences', default=20, type=int, help='Number of sentences to generate.')
 def generate_text(file_path: str, num_sentences: int = 20):
     json = file_io.read_json_file(file_path)
     model = NGramModel.fromAdjList(json["model"], json["order"])
     output_file = open(f"./{TXT_OUTPUT_PATH}/{file_io.file_name(file_path)}_generated.txt", "w")
+
     for _ in range(int(num_sentences)):
         generated_text = model.generate_text()
         output_file.write(generated_text + "\n\n")
-
-@click.group()
-def cli():
-    pass
-
-cli.add_command(make_model)
-cli.add_command(generate_text)
+        print(generated_text + "\n")
 
 if __name__ == '__main__':
-    cli()
+    main()
