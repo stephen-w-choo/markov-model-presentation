@@ -1,6 +1,7 @@
 from typing import Dict, Tuple, List, DefaultDict
 import random
 import nltk.tokenize
+import re
 
 # types
 NGram = Tuple[str, ...]
@@ -20,7 +21,7 @@ class NGramModel:
 
         for sentence in sentences:
             sentence = '///START ' + sentence + ' END///' # add start and end tokens
-            words = sentence.split(" ")
+            words = [re.sub("\n", " ", word) for word in sentence.split(" ")]
             for i in range(len(words) - n + 1):
                 ngrams.append(tuple(words[i:i+n]))
 

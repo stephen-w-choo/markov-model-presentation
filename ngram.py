@@ -34,7 +34,8 @@ def generate_text(file_path: str, num_sentences: int = 20):
     for _ in range(int(num_sentences)):
         generated_text = model.generate_text()
         output_file.write(generated_text + "\n\n")
-        formatted_print(generated_text + "\n\n")
+        formatted_print(generated_text)
+        print("")
 
 def formatted_print(text: str):
     # limit chars per line to 80, while preserving words
@@ -45,7 +46,7 @@ def formatted_print(text: str):
             print(line)
             line = ""
         line += word + " "
-
+    print(line)
 
 if __name__ == '__main__':
     main()
